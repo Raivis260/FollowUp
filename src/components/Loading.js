@@ -3,9 +3,9 @@ import React from "react";
 function Loading() {
   return (
     <div className="loading text-center">
-      <h3>Waiting for input...</h3>
+      <h3>Laukiama nuorodos...</h3>
       <div className="spinner-grow " role="status">
-        <span className="sr-only">Loading...</span>
+        <span className="sr-only">Prašome palaukti...</span>
       </div>
     </div>
   );

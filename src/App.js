@@ -1,16 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/app.scss";
 import News from "./components/News";
 import Parser from "rss-parser";
 function App() {
+  const [news, setNews] = useState(() => {
+    const localData = localStorage.getItem("news");
+    return localData ? JSON.parse(localData) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("news", JSON.stringify(news));
+  }, [news]);
+
   const [rssLink, setRssLink] = useState("");
-  const [news, setNews] = useState();
+  let parser = new Parser({
+    customFields: {
+      item: [["media:content", "media", { keepArray: true }]],
+    },
+  });
 
   const handleInupt = (e) => {
     setRssLink(e.target.value);
   };
-
-  let parser = new Parser();
 
   const fetchNews = async (link) => {
     let feed = await parser.parseURL(link);
@@ -22,7 +33,7 @@ function App() {
   };
 
   const handleClean = (e) => {
-    localStorage.clear();
+    setNews([]);
   };
 
   return (
@@ -47,8 +58,8 @@ function App() {
         >
           PRIDĖTI
         </button>
+        <News news={news} />
       </div>
-      <News news={news} />
     </div>
   );
 }

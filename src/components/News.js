@@ -1,24 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import Loading from "../components/Loading";
 
 function News({ news }) {
-  if (news) {
-    localStorage.setItem("news", JSON.stringify(news));
+  if (news == null) {
     return (
       <div>
-        <div className="news p-5">
-          <div className="row d-flex flex-column ">
-            <h1 className="col-12 col-md-4">DELFI {news.title}</h1>
-            <p className="col-12 col-md-4">{news.description}</p>
+        <Loading />
+      </div>
+    );
+  } else {
+    if (news.length !== 0) {
+      return (
+        <div>
+          <div className="news p-5">
+            <div className="row d-flex  ">
+              <h1 className="col-12">DELFI {news.title}</h1>
+              <p className="col-12">{news.description}</p>
 
-            {JSON.parse(localStorage.getItem("news")).items.map(
-              (item, index) => {
+              {news.items.map((item, index) => {
                 return (
-                  <div className="col-12 col-md-4" key={index}>
-                    <div className="card p-3 m-2">
+                  <div className="col-12 col-lg-4" key={index}>
+                    <div className="card p-3 m-2 ">
                       <img
-                        className="card-img-top"
-                        src={item.media}
+                        className="card-img-top "
+                        src={item.media[0].$.url}
                         alt="Card image cap"
                       />
                       <div className="card-body">
@@ -26,6 +31,7 @@ function News({ news }) {
                         <p className="card-text">{item.content}</p>
                         <a
                           href={item.link}
+                          target="_blank"
                           className="d-block p-3 w-100 custom-button text-center"
                         >
                           Plačiau
@@ -34,18 +40,18 @@ function News({ news }) {
                     </div>
                   </div>
                 );
-              }
-            )}
+              })}
+            </div>
           </div>
         </div>
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <Loading />
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div>
+          <Loading />
+        </div>
+      );
+    }
   }
 }
 
